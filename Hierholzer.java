@@ -35,6 +35,7 @@ public class Hierholzer {
         int atual = startVertice;
         do {
             Edge aresta = graph.getNeighbours(atual).getFirst();
+
             int novo = aresta.getV();
             sc.add(novo);
             graph.removeEdge(aresta);
@@ -47,9 +48,9 @@ public class Hierholzer {
     }
 
     public LinkedList<Integer> SearchEulerianCycle(int startVertice) {
-        
+
         eulerianCycle = SearchSimpleCycle(startVertice);
-        
+
         int i = 0;
 
         if (!graph.isEulerian()) {
@@ -59,9 +60,13 @@ public class Hierholzer {
         while (graph.nEdges > 0) {
             graph.nEdges--;
             i++;
-            InsertCycle(SearchSimpleCycle(eulerianCycle.get(i)), i);
+            if (!graph.getNeighbours(i).isEmpty()) {
+                LinkedList<Integer> novoCiclo = SearchSimpleCycle(eulerianCycle.get(i));
+                novoCiclo.removeFirst();
+                InsertCycle(novoCiclo, i);
+            }
         }
-        
+
         return eulerianCycle;
     }
 
@@ -182,8 +187,8 @@ public class Hierholzer {
 
     public void test6() {
         Hierholzer hierholzer = new Hierholzer();
-        graph = new Graph("grafo1.csv", "white.png", "Roteamento"); // Grafo nao Euleriano
-        //graph = new Graph("grafo2.csv", "white.png", "Roteamento"); // Grafo Euleriano
+        //graph = new Graph("grafo1.csv", "white.png", "Roteamento"); // Grafo nao Euleriano
+        graph = new Graph("grafo2.csv", "white.png", "Roteamento"); // Grafo Euleriano
         System.out.println();
         LinkedList<Integer> eulerianCycle = hierholzer.SearchEulerianCycle(0);
         System.out.println("Ciclo␣Final: ");
@@ -195,7 +200,7 @@ public class Hierholzer {
             Color color = Hierholzer.getRadomColor();
             graph2.markNode(i, color);
         }
-        
+
     }
 
     public void test7() {
@@ -224,6 +229,6 @@ public class Hierholzer {
 
     public static void main(String[] args) {
         Hierholzer instance = new Hierholzer();
-        instance.test6();
+        instance.test7();
     }
 }

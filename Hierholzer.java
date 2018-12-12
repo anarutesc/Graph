@@ -33,13 +33,12 @@ public class Hierholzer {
         LinkedList<Integer> sc = new LinkedList<Integer>();
         sc.add(startVertice);
         int atual = startVertice;
+
         do {
             Edge aresta = graph.getNeighbours(atual).getFirst();
-
             int novo = aresta.getV();
             sc.add(novo);
             graph.removeEdge(aresta);
-
             atual = novo;
 
         } while (atual != startVertice);
@@ -49,22 +48,22 @@ public class Hierholzer {
 
     public LinkedList<Integer> SearchEulerianCycle(int startVertice) {
 
-        eulerianCycle = SearchSimpleCycle(startVertice);
-
-        int i = 0;
-
         if (!graph.isEulerian()) {
             graph.turnEulerian();
         }
 
+        eulerianCycle = SearchSimpleCycle(startVertice);
+
+        int i = 0;
+
         while (graph.nEdges > 0) {
-            graph.nEdges--;
             i++;
-            if (!graph.getNeighbours(i).isEmpty()) {
+            if (!graph.getNeighbours(eulerianCycle.get(i)).isEmpty()) {
                 LinkedList<Integer> novoCiclo = SearchSimpleCycle(eulerianCycle.get(i));
-                novoCiclo.removeFirst();
+                novoCiclo.removeLast();
                 InsertCycle(novoCiclo, i);
             }
+
         }
 
         return eulerianCycle;
@@ -209,7 +208,7 @@ public class Hierholzer {
 
         // graph = new Graph("grafo.csv", "white.png", "Roteamento");
         // graph = new Graph("grafo1.csv", "white.png", "Roteamento");
-        // graph = new Graph("grafoMapa1.csv", "mapa1.png", "Roteamento");
+        //graph = new Graph("grafoMapa1.csv", "mapa1.png", "Roteamento");
         graph = new Graph("grafoMapa2.csv", "mapa2.png", "Roteamento");
 
         System.out.println();
@@ -218,7 +217,7 @@ public class Hierholzer {
         System.out.println(Hierholzer.CycleToString(eulerianCycle));
 
         // Graph graph2 = new Graph(graph.getGraphics(), "white.png", "Rota Final");
-        // Graph graph2 = new Graph(graph.getGraphics(), "mapa1.png", "Rota Final");
+        //Graph graph2 = new Graph(graph.getGraphics(), "mapa1.png", "Rota Final");
         Graph graph2 = new Graph(graph.getGraphics(), "mapa2.png", "Rota Final");
         for (Integer i : eulerianCycle) {
             slow();
@@ -229,6 +228,6 @@ public class Hierholzer {
 
     public static void main(String[] args) {
         Hierholzer instance = new Hierholzer();
-        instance.test7();
+        instance.test6();
     }
 }
